@@ -2,7 +2,6 @@ import scipy.stats as st
 import seaborn as sns
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa import stattools as stt
-from statsmodels import tsa
 from statsmodels.tsa.vector_ar.var_model import forecast
 import statsmodels.api as smapi
 import datetime
