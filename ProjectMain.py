@@ -1,5 +1,4 @@
 import scipy.stats as st
-import seaborn as sns
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa import stattools as stt
 from statsmodels.tsa.vector_ar.var_model import forecast
@@ -16,7 +15,7 @@ plt.style.use(os.path.join(os.getcwd(), 'mystyle.mplstyle') )
 plt.rcParams['axes.edgecolor'] = 'w'
 import warnings  # current version of seaborn generates a bunch of warnings that we'll ignore
 warnings.filterwarnings("ignore")
-import seaborn as sns
+# import seaborn as sns
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
@@ -24,7 +23,6 @@ import plotly.graph_objs as go
 from pandas_datareader import data, wb
 from matplotlib.pylab import rcParams
 rcParams['figure.figsize'] = 15, 6
-from fbprophet import Prophet
 #plt.style.use('fivethirtyeight')
 
 
@@ -59,6 +57,9 @@ from fbprophet import Prophet
 #     print('stationary?\t {0}'.format(['true', 'false']\
 #                                    [outpt[0]>outpt[4]['5%']]))
 #     return outpt
+
+
+
 
 
 
@@ -97,7 +98,7 @@ print("\n#####Statsicical details of the time series ####\n", df.describe())
 #plt.show()
 
 ### Prophet Forcasting
-df[] = np.log(df[])
+# df[] = np.log(df[])
 
 my_model = Prophet(interval_width=0.95)
 my_model.fit(df)
