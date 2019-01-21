@@ -25,37 +25,6 @@ from matplotlib.pylab import rcParams
 rcParams['figure.figsize'] = 15, 6
 #plt.style.use('fivethirtyeight')
 
-# def despine(axs):
-#     # to be able to handle subplot grids
-#     # it assumes the input is a list of
-#     # axes instances, if it is not a list,
-#     # it puts it in one
-#     if type(axs) != type([]):
-#         axs = [axs]
-#     for ax in axs:
-#         ax.yaxis.set_ticks_position('left')
-#         ax.xaxis.set_ticks_position('bottom')
-#         ax.spines['bottom'].set_position(('outward', 10))
-#         ax.spines['left'].set_position(('outward', 10))
-
-
-
-####
-#
-# def is_stationary(df, maxlag=14, autolag=None, regression='ct'):
-#     """Run the Augmented Dickey-Fuller test from statsmodels and print output.
-#     """
-#     outpt = stt.adfuller(df,maxlag=maxlag, autolag=autolag,
-#                             regression=regression)
-#     print('adf\t\t {0:.3f}'.format(outpt[0]))
-#     print('p\t\t {0:.3g}'.format(outpt[1]))
-#     print('crit. val.\t 1%: {0:.3f}, \
-# 5%: {1:.3f}, 10%: {2:.3f}'.format(outpt[4]["1%"],
-#                                      outpt[4]["5%"], outpt[4]["10%"]))
-#     print('stationary?\t {0}'.format(['true', 'false']\
-#                                    [outpt[0]>outpt[4]['5%']]))
-#     return outpt
-
 ############### Import Data Set #############
 df = pd.read_csv('grafana_data_export-2017-10-09-to-2017-10-23.csv',
                  parse_dates=['Time'],
