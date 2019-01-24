@@ -67,7 +67,6 @@ trimmed_df['yhat'] = forecast['yhat']
 print("##############After\n",trimmed_df)
 
 
-
 # print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
 
 
