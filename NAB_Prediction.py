@@ -58,14 +58,12 @@ future = model.make_future_dataframe(periods=10, freq='H')
 
 
 
-
 forecast = model.predict(future)
 
 
 print("##############Before\n",trimmed_df)
 trimmed_df['yhat'] = forecast['yhat']
 print("##############After\n",trimmed_df)
-
 
 # print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
 
