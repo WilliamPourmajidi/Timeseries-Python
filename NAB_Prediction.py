@@ -52,7 +52,7 @@ model.fit(trimmed_df)  # Fitting the data frame to the model
 # future = model.make_future_dataframe(periods=3)
 # print(future.tail())
 
-future = model.make_future_dataframe(periods=10, freq='5Min')
+future = model.make_future_dataframe(periods=10000, freq='5Min')
 print(future)
 forecast = model.predict(future)
 
@@ -73,6 +73,24 @@ lower_anomalyborder = trimmed_df['yhat_lower'] - int(1.5 * stdv)
 trimmed_df['upper_anomalyborder'] = upper_anomalyborder
 trimmed_df['lower_anomalyborder'] = lower_anomalyborder
 print(trimmed_df)
+
+### Anomaly Detection
+
+anomalies = pd.DataFrame(index=trimmed_df.index)
+anomalies['Anomalies'] = np.nan
+
+print(anomalies)
+
+# # updating the anomalies data frame with anomaly values
+for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in series format
+    if ((row['y']) > (row['upper_anomalyborder']) or (row['y']) < (row['lower_anomalyborder'])  ):
+        # print("Warning: Anomaly Detected")
+        anomalies.loc[i]['Anomalies'] = row['y']
+
+print(anomalies)
+# #
+
+
 #
 #
 # # fig1 = model.plot(forecast)
@@ -87,24 +105,13 @@ plt.plot(trimmed_df['yhat_upper'], "r-.", label="Predicted Upper Bound")
 plt.plot(trimmed_df['yhat_lower'], "r-.", label="Predicted Lower Bound")
 plt.plot(trimmed_df['upper_anomalyborder'], label="Upper Anomaly Border")
 plt.plot(trimmed_df['lower_anomalyborder'], label="Lower Anomaly Border")
+plt.plot(anomalies['Anomalies'], "ro", markersize=10, label="Anomalies")
 plt.legend(loc='best')
 plt.grid(True)
 plt.show()
 
 
-anomalies = pd.DataFrame(index=trimmed_df.index)
-anomalies['Anomalies'] = 0
 
-print(anomalies)
-
-# # updating the anomalies data frame with anomaly values
-for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in series format
-    if ((row['y']) > (row['upper_anomalyborder'])):
-        # print("Warning: Anomlay Detected")
-        # anomalies.loc[i]['av'] = row['av']
-
-
-# #
 
 
 # create an empty dataframe with the same index and columns of testing dataset
