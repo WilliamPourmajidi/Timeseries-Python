@@ -111,7 +111,7 @@ plt.grid(True)
 plt.show()
 
 
-
+# Pure ARIMA
 
 
 # create an empty dataframe with the same index and columns of testing dataset
