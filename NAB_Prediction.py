@@ -4,11 +4,15 @@ from statsmodels.tsa import stattools as stt
 from statsmodels.tsa.vector_ar.var_model import forecast
 import statsmodels.api as smapi
 import datetime
+import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import matplotlib.pyplot as plot
 import pandas as pd
 import numpy as np
 from fbprophet import Prophet
+
+import statsmodels.api as sm
+from pyramid.arima import auto_arima
 import csv
 import os
 
@@ -111,7 +115,55 @@ plt.grid(True)
 plt.show()
 
 
-# Pure ARIMA
+# Pure SARIMA
+#!!!!!!!!!!!!!!!!!
+
+
+############### method 5 SARIMA
+
+fit1 = sm.tsa.statespace.SARIMAX(trimmed_df['y'], order=(1, 1, 1), seasonal_order=(0, 1, 1, 3)).fit()
+# print("+", fit1.predict())
+trimmed_df['SARIMA'] = fit1.predict()
+
+print("##### Now SARIMA\n",trimmed_df)
+
+#
+#
+# y_hat_SARIMA['lower_bound'] = y_hat_SARIMA.SARIMA - int(2 * stdv)  # adding a new column for the lower bound
+# y_hat_SARIMA['upper_bound'] = y_hat_SARIMA.SARIMA + int(2 * stdv)  # adding a new column for the upper bound
+#
+# upper_bound = y_hat_SARIMA.SARIMA + int(2 * stdv)
+# lower_bound = y_hat_SARIMA.SARIMA - int(2 * stdv)
+#
+# anomalies_ses = pd.DataFrame(index=testing_set.index,
+#                              columns=testing_set.columns)  # create an empty dataframe with the same index and columns of testing dataset
+#
+# for i, row in y_hat_SARIMA.iterrows():  # i: dataframe index; row: each row in series format
+#     # print(row['av'],i)
+#     if ((row['av']) > (row['upper_bound'])):
+#         anomalies_ses.loc[i]['av'] = row['av']
+#
+# plt.figure(figsize=(18, 5))
+# plt.title("Seasonal Auto-Regressive Integrated Moving Average with ", fontsize=20)
+# # plt.plot(training_set.index, training_set['av'], label='Training Dataset')
+# plt.plot(testing_set.index, testing_set['av'], label='Testing Dataset')
+# plt.plot(y_hat_SARIMA['SARIMA'], label='SARIMA')
+# plt.plot(upper_bound, "r-.", label="Upper Bound")
+# plt.plot(lower_bound, "r--", label="Lower Bound")
+# plt.plot(anomalies_ses, "ro", markersize=2, label="Anomalies")
+# plt.legend(loc='best')
+# plt.grid(True)
+# plt.show()
+#
+# rms_SARIMA_average = sqrt(mean_squared_error(testing_set.av, y_hat_SARIMA.SARIMA))
+# print(f"Root mean square error (RMSE) for Fifth Model (SARIMA): {rms_SARIMA_average}")
+#
+#
+
+
+
+#!!!!!!!!!!!!!!!!!
+
 
 
 # create an empty dataframe with the same index and columns of testing dataset
