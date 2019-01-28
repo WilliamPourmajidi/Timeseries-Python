@@ -122,7 +122,6 @@ trimmed_df['SARIMA'] = fit1.predict()
 
 
 
-
 trimmed_df['sarima_lower_bound'] = trimmed_df.SARIMA - int(2.5 * stdv)  # adding a new column for the lower bound
 trimmed_df['sarima_upper_bound'] = trimmed_df.SARIMA + int(2.5 * stdv)  # adding a new column for the upper bound
 print("##### Now SARIMA\n", trimmed_df)
