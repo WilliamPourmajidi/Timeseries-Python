@@ -9,8 +9,9 @@ import matplotlib.pyplot as plt
 import matplotlib.pyplot as plot
 import pandas as pd
 import numpy as np
+from pyramid.arima import auto_arima
+from plotly.plotly import plot_mpl
 from fbprophet import Prophet
-
 import statsmodels.api as sm
 from pyramid.arima import auto_arima
 import csv
@@ -24,13 +25,10 @@ warnings.filterwarnings("ignore")
 import seaborn as sns
 import plotly.plotly as py
 import plotly.graph_objs as go
-# from pandas.io import data, wb
 from pandas_datareader import data, wb
 from matplotlib.pylab import rcParams
 
 rcParams['figure.figsize'] = 15, 6
-# plt.style.use('fivethirtyeight')
-
 
 # Settings for Panda dataframe displays
 
@@ -78,12 +76,10 @@ trimmed_df['upper_anomalyborder'] = upper_anomalyborder
 trimmed_df['lower_anomalyborder'] = lower_anomalyborder
 # print(trimmed_df)
 
-### Anomaly Detection
+### Anomaly Detection using Prophet
 
 anomalies = pd.DataFrame(index=trimmed_df.index)
 anomalies['anomalies_prophet'] = np.nan
-
-# print(anomalies)
 
 # # updating the anomalies data frame with anomaly values
 for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in series format
@@ -92,19 +88,15 @@ for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in ser
         anomalies.loc[i]['anomalies_prophet'] = row['y']
 
 # print(anomalies)
-# #
 
 
-#
-#
-# # fig1 = model.plot(forecast)
-# # fig1.show()
-#
-#
+fig1 = model.plot(forecast)
+fig1.show()
+
 plt.figure(figsize=(18, 5))
 plt.title("Prophet(ARIMA)-based Data Analysis", fontsize=20)
 plt.plot(trimmed_df['y'], label='Actual Data')
-plt.plot(trimmed_df['yhat'], label='Predicted Data')
+plt.plot(trimmed_df['yhat'], label='Predicted Data Using Prophet')
 plt.plot(trimmed_df['yhat_upper'], "r-.", label="Predicted Upper Bound")
 plt.plot(trimmed_df['yhat_lower'], "r-.", label="Predicted Lower Bound")
 plt.plot(trimmed_df['upper_anomalyborder'], label="Upper Anomaly Border")
@@ -116,18 +108,38 @@ plt.show()
 
 ####  Pure SARIMA
 
-fit1 = sm.tsa.statespace.SARIMAX(trimmed_df['y'], order=(1, 1, 1), seasonal_order=(0, 1, 1, 3)).fit()
+
+########  Decomposition and Seasonality Check
+
+#
+
+# result = seasonal_decompose(trimmed_df.y, model='multiplicative', freq=52)
+# fig = result.plot()
+# plot_mpl(fig)
+
+stepwise_model = auto_arima(trimmed_df.y, start_p=1, start_q=1,
+                            max_p=2, max_q=2, m=3,
+                            start_P=0, seasonal=True,
+                            d=1, D=1, trace=True,
+                            error_action='ignore',
+                            suppress_warnings=True,
+                            stepwise=True)
+
+print(stepwise_model.aic())
+# Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 1, 1, 3); AIC=18416.152, BIC=18460.259, Fit time=7.384 seconds  (The lowest Akaike Information Critera is better)
+
+
+
+fit1 = sm.tsa.statespace.SARIMAX(trimmed_df['y'], order=(2, 1, 2), seasonal_order=(0, 1, 1, 3)).fit()
 # print("+", fit1.predict())
 trimmed_df['SARIMA'] = fit1.predict()
-
-
 
 trimmed_df['sarima_lower_bound'] = trimmed_df.SARIMA - int(2.5 * stdv)  # adding a new column for the lower bound
 trimmed_df['sarima_upper_bound'] = trimmed_df.SARIMA + int(2.5 * stdv)  # adding a new column for the upper bound
 print("##### Now SARIMA\n", trimmed_df)
 
-sarima_upper_bound = trimmed_df.SARIMA + int(2.5 * stdv)
-sarima_lower_bound = trimmed_df.SARIMA - int(2.5 * stdv)
+# sarima_upper_bound = trimmed_df.SARIMA + int(2.5 * stdv)
+# sarima_lower_bound = trimmed_df.SARIMA - int(2.5 * stdv)
 
 anomalies['anomalies_sarima'] = np.nan
 
@@ -137,19 +149,25 @@ for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in ser
         # print("Warning: Anomaly Detected")
         anomalies.loc[i]['anomalies_sarima'] = row['y']
 
-
 print(anomalies)
+plt.figure(figsize=(18, 5))
+plt.title("Pure SARIMA Data Analysis", fontsize=20)
+plt.plot(trimmed_df['y'], label='Actual Data')
+plt.plot(trimmed_df['SARIMA'], label='Predicted Data using SARIMA')
+plt.plot(trimmed_df['sarima_upper_bound'], label="Upper Anomaly Border-SARIMA")
+plt.plot(trimmed_df['sarima_lower_bound'], label="Lower Anomaly Border-SARIMA")
+plt.plot(anomalies['anomalies_sarima'], "ro", markersize=10, label="Anomalies")
+plt.legend(loc='best')
+plt.grid(True)
+plt.show()
 
 
+# TODO: 1) Add measures such as RMSE , 2) add Auto arima
+#
 
 # rms_SARIMA_average = sqrt(mean_squared_error(testing_set.av, y_hat_SARIMA.SARIMA))
 # print(f"Root mean square error (RMSE) for Fifth Model (SARIMA): {rms_SARIMA_average}")
 #
-#
-
-
-# !!!!!!!!!!!!!!!!!
-
 
 # create an empty dataframe with the same index and columns of testing dataset
 # ## Enable for extra plot
