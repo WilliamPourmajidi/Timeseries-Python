@@ -71,27 +71,27 @@ print("##############After\n", trimmed_df)
 print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
 
 stdv = np.std(trimmed_df['y'])
-print(stdv)
-upper_anomalyborder = trimmed_df['yhat_upper'] + int(1.5 * stdv)
-lower_anomalyborder = trimmed_df['yhat_lower'] - int(1.5 * stdv)
+# print(stdv)
+upper_anomalyborder = trimmed_df['yhat'] + int(2.5 * stdv)
+lower_anomalyborder = trimmed_df['yhat'] - int(2.5 * stdv)
 trimmed_df['upper_anomalyborder'] = upper_anomalyborder
 trimmed_df['lower_anomalyborder'] = lower_anomalyborder
-print(trimmed_df)
+# print(trimmed_df)
 
 ### Anomaly Detection
 
 anomalies = pd.DataFrame(index=trimmed_df.index)
-anomalies['Anomalies'] = np.nan
+anomalies['anomalies_prophet'] = np.nan
 
-print(anomalies)
+# print(anomalies)
 
 # # updating the anomalies data frame with anomaly values
 for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in series format
-    if ((row['y']) > (row['upper_anomalyborder']) or (row['y']) < (row['lower_anomalyborder'])  ):
+    if ((row['y']) > (row['upper_anomalyborder']) or (row['y']) < (row['lower_anomalyborder'])):
         # print("Warning: Anomaly Detected")
-        anomalies.loc[i]['Anomalies'] = row['y']
+        anomalies.loc[i]['anomalies_prophet'] = row['y']
 
-print(anomalies)
+# print(anomalies)
 # #
 
 
@@ -109,61 +109,47 @@ plt.plot(trimmed_df['yhat_upper'], "r-.", label="Predicted Upper Bound")
 plt.plot(trimmed_df['yhat_lower'], "r-.", label="Predicted Lower Bound")
 plt.plot(trimmed_df['upper_anomalyborder'], label="Upper Anomaly Border")
 plt.plot(trimmed_df['lower_anomalyborder'], label="Lower Anomaly Border")
-plt.plot(anomalies['Anomalies'], "ro", markersize=10, label="Anomalies")
+plt.plot(anomalies['anomalies_prophet'], "ro", markersize=10, label="Anomalies")
 plt.legend(loc='best')
 plt.grid(True)
 plt.show()
 
-
-# Pure SARIMA
-#!!!!!!!!!!!!!!!!!
-
-
-############### method 5 SARIMA
+####  Pure SARIMA
 
 fit1 = sm.tsa.statespace.SARIMAX(trimmed_df['y'], order=(1, 1, 1), seasonal_order=(0, 1, 1, 3)).fit()
 # print("+", fit1.predict())
 trimmed_df['SARIMA'] = fit1.predict()
 
-print("##### Now SARIMA\n",trimmed_df)
 
-#
-#
-# y_hat_SARIMA['lower_bound'] = y_hat_SARIMA.SARIMA - int(2 * stdv)  # adding a new column for the lower bound
-# y_hat_SARIMA['upper_bound'] = y_hat_SARIMA.SARIMA + int(2 * stdv)  # adding a new column for the upper bound
-#
-# upper_bound = y_hat_SARIMA.SARIMA + int(2 * stdv)
-# lower_bound = y_hat_SARIMA.SARIMA - int(2 * stdv)
-#
-# anomalies_ses = pd.DataFrame(index=testing_set.index,
-#                              columns=testing_set.columns)  # create an empty dataframe with the same index and columns of testing dataset
-#
-# for i, row in y_hat_SARIMA.iterrows():  # i: dataframe index; row: each row in series format
-#     # print(row['av'],i)
-#     if ((row['av']) > (row['upper_bound'])):
-#         anomalies_ses.loc[i]['av'] = row['av']
-#
-# plt.figure(figsize=(18, 5))
-# plt.title("Seasonal Auto-Regressive Integrated Moving Average with ", fontsize=20)
-# # plt.plot(training_set.index, training_set['av'], label='Training Dataset')
-# plt.plot(testing_set.index, testing_set['av'], label='Testing Dataset')
-# plt.plot(y_hat_SARIMA['SARIMA'], label='SARIMA')
-# plt.plot(upper_bound, "r-.", label="Upper Bound")
-# plt.plot(lower_bound, "r--", label="Lower Bound")
-# plt.plot(anomalies_ses, "ro", markersize=2, label="Anomalies")
-# plt.legend(loc='best')
-# plt.grid(True)
-# plt.show()
-#
+
+
+trimmed_df['sarima_lower_bound'] = trimmed_df.SARIMA - int(2.5 * stdv)  # adding a new column for the lower bound
+trimmed_df['sarima_upper_bound'] = trimmed_df.SARIMA + int(2.5 * stdv)  # adding a new column for the upper bound
+print("##### Now SARIMA\n", trimmed_df)
+
+sarima_upper_bound = trimmed_df.SARIMA + int(2.5 * stdv)
+sarima_lower_bound = trimmed_df.SARIMA - int(2.5 * stdv)
+
+anomalies['anomalies_sarima'] = np.nan
+
+# # updating the anomalies data frame with anomaly values
+for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in series format
+    if ((row['y']) > (row['sarima_upper_bound']) or (row['y']) < (row['sarima_lower_bound'])):
+        # print("Warning: Anomaly Detected")
+        anomalies.loc[i]['anomalies_sarima'] = row['y']
+
+
+print(anomalies)
+
+
+
 # rms_SARIMA_average = sqrt(mean_squared_error(testing_set.av, y_hat_SARIMA.SARIMA))
 # print(f"Root mean square error (RMSE) for Fifth Model (SARIMA): {rms_SARIMA_average}")
 #
 #
 
 
-
-#!!!!!!!!!!!!!!!!!
-
+# !!!!!!!!!!!!!!!!!
 
 
 # create an empty dataframe with the same index and columns of testing dataset
