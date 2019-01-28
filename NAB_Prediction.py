@@ -162,7 +162,7 @@ plt.grid(True)
 plt.show()
 
 
-# TODO: 1) Add measures such as RMSE , 2) add Auto arima
+# TODO: 1) Add measures such as RMSE
 #
 
 # rms_SARIMA_average = sqrt(mean_squared_error(testing_set.av, y_hat_SARIMA.SARIMA))
