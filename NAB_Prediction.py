@@ -149,6 +149,7 @@ for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in ser
         # print("Warning: Anomaly Detected")
         anomalies.loc[i]['anomalies_sarima'] = row['y']
 
+
 print(anomalies)
 plt.figure(figsize=(18, 5))
 plt.title("Pure SARIMA Data Analysis", fontsize=20)
