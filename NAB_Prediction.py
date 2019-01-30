@@ -89,7 +89,6 @@ for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in ser
 
 # print(anomalies)
 
-
 fig1 = model.plot(forecast)
 fig1.show()
 
