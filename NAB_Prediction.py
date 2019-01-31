@@ -87,6 +87,7 @@ for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in ser
         # print("Warning: Anomaly Detected")
         anomalies.loc[i]['anomalies_prophet'] = row['y']
 
+
 # print(anomalies)
 
 fig1 = model.plot(forecast)
@@ -128,7 +129,6 @@ print(stepwise_model.aic())
 # Fit ARIMA: order=(2, 1, 2) seasonal_order=(0, 1, 1, 3); AIC=18416.152, BIC=18460.259, Fit time=7.384 seconds  (The lowest Akaike Information Critera is better)
 
 
-
 fit1 = sm.tsa.statespace.SARIMAX(trimmed_df['y'], order=(2, 1, 2), seasonal_order=(0, 1, 1, 3)).fit()
 # print("+", fit1.predict())
 trimmed_df['SARIMA'] = fit1.predict()
@@ -148,7 +148,6 @@ for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in ser
         # print("Warning: Anomaly Detected")
         anomalies.loc[i]['anomalies_sarima'] = row['y']
 
-
 print(anomalies)
 plt.figure(figsize=(18, 5))
 plt.title("Pure SARIMA Data Analysis", fontsize=20)
@@ -160,7 +159,6 @@ plt.plot(anomalies['anomalies_sarima'], "ro", markersize=10, label="Anomalies")
 plt.legend(loc='best')
 plt.grid(True)
 plt.show()
-
 
 # TODO: 1) Add measures such as RMSE
 #
