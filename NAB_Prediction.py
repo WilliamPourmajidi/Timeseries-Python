@@ -87,6 +87,7 @@ for i, row in trimmed_df.iterrows():  # i: dataframe index; row: each row in ser
         # print("Warning: Anomaly Detected")
         anomalies.loc[i]['anomalies_prophet'] = row['y']
 
+
 # print(anomalies)
 
 fig1 = model.plot(forecast)
