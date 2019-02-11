@@ -31,7 +31,6 @@ ax.set_xlabel('Date')
 
 plt.show()
 
-
 my_model = Prophet(interval_width=0.95)
 my_model.fit(df)
 
