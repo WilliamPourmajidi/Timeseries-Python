@@ -25,6 +25,7 @@ df = df.rename(columns={'Month': 'ds',
 
 print(df.head(5))
 
+
 ax = df.set_index('ds').plot(figsize=(12, 8))
 ax.set_ylabel('Monthly Number of Airline Passengers')
 ax.set_xlabel('Date')
