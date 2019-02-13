@@ -18,6 +18,7 @@ print(df.dtypes)
 df['Month'] = pd.DatetimeIndex(df['Month'])
 df.dtypes
 
+
 print(df.dtypes)
 
 df = df.rename(columns={'Month': 'ds',
