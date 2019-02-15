@@ -23,7 +23,6 @@ print(df.dtypes)
 
 df = df.rename(columns={'Month': 'ds',
                         'AirPassengers': 'y'})
-
 print(df.head(5))
 
 ax = df.set_index('ds').plot(figsize=(12, 8))
