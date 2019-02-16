@@ -45,3 +45,4 @@ plt.show()
 
 my_model.plot_components(forecast)
 plt.show()
+
