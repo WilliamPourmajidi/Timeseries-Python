@@ -2,6 +2,7 @@
 import numpy as np
 # %matplotlib inline
 from matplotlib.pylab import rcParams
+
 rcParams['figure.figsize'] = 15, 6
 import pandas as pd
 from fbprophet import Prophet
@@ -17,7 +18,6 @@ print(df.head(5))
 print(df.dtypes)
 df['Month'] = pd.DatetimeIndex(df['Month'])
 df.dtypes
-
 
 print(df.dtypes)
 
@@ -45,4 +45,3 @@ plt.show()
 
 my_model.plot_components(forecast)
 plt.show()
-
