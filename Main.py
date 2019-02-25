@@ -44,5 +44,6 @@ my_model.plot(forecast, uncertainty=True)
 plt.show()
 
 my_model.plot_components(forecast)
+
 plt.show()
 
