@@ -34,6 +34,8 @@ plt.show()
 my_model = Prophet(interval_width=0.95)
 my_model.fit(df)
 
+
+
 future_dates = my_model.make_future_dataframe(periods=196, freq='MS')
 future_dates.tail()
 
@@ -43,7 +45,7 @@ forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail()
 my_model.plot(forecast, uncertainty=True)
 plt.show()
 
-
+     
 my_model.plot_components(forecast)
 
 plt.show()
